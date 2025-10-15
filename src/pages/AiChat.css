@@ -1,0 +1,27 @@
+.ai-hero {
+  margin: 20px;
+  padding: 24px;
+  border-radius: 12px;
+  color: #fff;
+  background: linear-gradient(135deg, #1a4d1a 0%, #2d5a2d 50%, #1a4d1a 100%);
+  position: relative;
+  overflow: hidden;
+}
+.ai-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+}
+.ai-hero > * { position: relative; z-index: 1; }
+
+
+.ai-frame {
+  width: calc(100% - 40px);
+  height: 65vh;
+  margin: 20px;
+  border: 1px solid #eaeaea;
+  border-radius: 12px;
+}
+
+

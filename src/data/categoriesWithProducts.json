@@ -1,0 +1,11 @@
+{
+  "Fruits": ["Mango", "Alphonso", "Kesar", "Himsagar", "Langra", "Chausa", "Watermelon", "Muskmelon", "Lychee", "Jackfruit", "Jamun", "Papaya", "Pineapple", "Guava", "Strawberry", "Peach", "Plum", "Passion Fruit", "Dragon Fruit", "Rambutan", "Avocado", "Durian", "Custard Apple", "Sitaphal", "Pear", "Apple", "Pomelo", "Sweet Lime", "Mosambi", "Wood Apple", "Kiwi", "Karonda", "Ber", "Persimmon", "Oranges", "Mandarin", "Sweet Orange", "Grapes", "Fresh Figs", "Sapota", "Chikoo", "Pomegranate", "Bilimbi", "Banana", "Coconut", "Mangosteen", "Langsat", "Star Fruit", "Kamrakh", "Elephant Apple", "Chalta", "Tamarillo", "Amla", "Indian Gooseberry", "Bael", "Jujube", "Tadgola", "Ice Apple"
+],
+  "Vegetables": ["Potato", "Onion", "Tomato", "Cauliflower", "Cabbage", "Carrot", "Brinjal", "Okra", "Spinach", "Cucumber", "Bottle Gourd", "Bitter Gourd", "Pumpkin", "Green Beans", "Peas", "Radish", "Sweet Potato", "Yam", "Taro Root", "Turnip", "Beetroot", "Capsicum", "Coriander", "Fenugreek", "Mint", "Garlic", "Ginger", "Chili", "Drumstick", "Cluster Beans", "Pointed Gourd", "Snake Gourd", "Ash Gourd", "Ridge Gourd", "Tinda", "Kantola", "Karela", "Parwal", "Moringa", "Chickpea", "Cowpea", "Lentil", "Chana", "Papdi", "Taro", "Kachalu", "Shakarkand", "Singhara", "Chichinda", "Singhara", "Kachalu", "Shakarkand"
+],
+  "Flowers": ["Rose", "Lily", "Jasmine", "Marigold", "Tulip", "Sunflower", "Hibiscus", "Orchid", "Dahlia", "Lotus", "Chrysanthemum", "Bougainvillea", "Magnolia", "Gladiolus", "Narcissus", "Daffodil", "Carnation", "Peony", "Camellia", "Gardenia", "Ixora", "Plumeria", "Frangipani", "Petunia", "Zinnia", "Violet", "Daisy", "Aster", "Calendula", "Pansy", "Hellebore", "Alstroemeria"
+],
+  "Grains": ["Rice", "Wheat", "Maize", "Barley", "Millet", "Sorghum", "Ragi", "Oats", "Bajra", "Quinoa", "Buckwheat", "Amaranth", "Kodo Millet", "Foxtail Millet", "Little Millet", "Finger Millet", "Job’s Tears", "Pearl Millet", "Barnyard Millet", "Teff"
+],
+  "Other": ["Honey", "Milk", "Eggs", "Cheese", "Butter", "Yogurt"]
+}

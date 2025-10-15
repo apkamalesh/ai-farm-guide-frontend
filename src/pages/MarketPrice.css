@@ -1,0 +1,88 @@
+.market-price {
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #f9f9f9;
+  min-height: 100vh;
+}
+
+.title {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 30px;
+}
+
+.trend-cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 25px;
+}
+
+.trend-section {
+  background: white;
+  padding: 20px;
+  width: 300px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  transition: transform 0.2s ease;
+}
+
+.trend-section:hover {
+  transform: translateY(-5px);
+}
+
+.trend-section h3 {
+  font-size: 1.3rem;
+  margin-bottom: 15px;
+  color: #444;
+}
+
+.trend-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.trend-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.trend-item:last-child {
+  border-bottom: none;
+}
+
+.item-name {
+  font-weight: 600;
+  flex: 1;
+}
+
+.item-price {
+  color: #222;
+  font-weight: 500;
+  margin-right: 10px;
+}
+
+.item-change {
+  font-weight: bold;
+}
+
+.item-change.up {
+  color: green;
+}
+
+.item-change.down {
+  color: red;
+}
+
+.loading,
+.error {
+  text-align: center;
+  padding: 50px;
+  font-size: 1.2rem;
+}
