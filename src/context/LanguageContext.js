@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
-import MarketPrice from '../pages/MarketPrice';
 
 const LanguageContext = createContext({
   language: 'en',
@@ -10,7 +9,7 @@ const LanguageContext = createContext({
 const TRANSLATIONS = {
   en: {
     welcome: 'Welcome',
-    userName: 'ARUN',
+    userName: 'KAMALESH',
     news: 'News',
     farmingNews: 'Farming & Agriculture Highlights',
     speakWithAi: 'Speak with AI',
@@ -23,10 +22,20 @@ const TRANSLATIONS = {
     addProduct: 'Add Product',
     viewProducts: 'View Products',
     name: 'Name',
+    farmerName: 'Farmer Name',
+    state: 'State',
+    selectState: 'Select State',
     city: 'City',
+    selectCity: 'Select City',
+    category: 'Category',
+    selectCategory: 'Select Category',
     phone: 'Phone',
+    farmerPhone: 'Farmer Phone',
     product: 'Product',
+    selectProduct: 'Select Product',
+    quantityKgs: 'Quantity (Kgs)',
     price: 'Price',
+    pricePerKg: 'Price (Per Kg)',
     submit: 'Submit',
     noProducts: 'No products yet. Be the first to add!',
     language: 'Language',
@@ -34,11 +43,11 @@ const TRANSLATIONS = {
     tamil: 'Tamil',
     home: 'Home',
     sponsored: 'Sponsored',
-    MarketPrice:'Market Price'
+    MarketPrice: 'Market Price'
   },
   ta: {
     welcome: 'வணக்கம்',
-    userName: 'அருண்',
+    userName: 'கமலேஷ்',
     news: 'செய்திகள்',
     farmingNews: 'விவசாயம் & வேளாண் முக்கிய செய்திகள்',
     speakWithAi: 'AI உடன் பேச',
@@ -51,10 +60,20 @@ const TRANSLATIONS = {
     addProduct: 'பொருள் சேர்க்க',
     viewProducts: 'பொருட்கள் பார்க்க',
     name: 'பெயர்',
+    farmerName: 'விவசாயி பெயர்',
+    state: 'மாநிலம்',
+    selectState: 'மாநிலத்தைத் தேர்ந்தெடுக்கவும்',
     city: 'நகரம்',
+    selectCity: 'நகரத்தைத் தேர்ந்தெடுக்கவும்',
+    category: 'வகை',
+    selectCategory: 'வகையைத் தேர்ந்தெடுக்கவும்',
     phone: 'தொலைபேசி',
+    farmerPhone: 'விவசாயி தொலைபேசி',
     product: 'பொருள்',
+    selectProduct: 'பொருளைத் தேர்ந்தெடுக்கவும்',
+    quantityKgs: 'அளவு (கிலோ)',
     price: 'விலை',
+    pricePerKg: 'விலை (ஒரு கிலோ)',
     submit: 'சமர்ப்பிக்க',
     noProducts: 'இன்னும் பொருட்கள் இல்லை. முதலில் நீங்கள் சேர்க்கவும்!',
     language: 'மொழி',
@@ -62,7 +81,7 @@ const TRANSLATIONS = {
     tamil: 'தமிழ்',
     home: 'முகப்பு',
     sponsored: 'விளம்பரம்',
-    MarketPrice:'சந்தை விலை'
+    MarketPrice: 'சந்தை விலை'
   }
 };
 
@@ -75,7 +94,9 @@ export function LanguageProvider({ children }) {
   useEffect(() => {
     try {
       window.localStorage.setItem('lang', language);
-    } catch {}
+    } catch (e) {
+      console.error("Local storage not available");
+    }
   }, [language]);
 
   const t = useMemo(() => {
@@ -91,5 +112,3 @@ export function LanguageProvider({ children }) {
 export function useLanguage() {
   return useContext(LanguageContext);
 }
-
-

@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useLanguage } from '../context/LanguageContext';
+import apiClient from '../apiClient'; 
 import statesWithCities from '../data/statesWithCities.json';
 import categoriesWithProducts from '../data/categoriesWithProducts.json';
 import './Market.css';
@@ -10,38 +11,33 @@ function Market() {
     name: '', state: '', city: '', category: '', product: '', phone: '', quantity: '', price: ''
   });
 
-  const [items, setItems] = useState(() => {
-    try {
-      const saved = localStorage.getItem('market_items');
-      if (saved) return JSON.parse(saved);
-    } catch {}
-    return []; // Start with empty array
-  });
-
+  const [items, setItems] = useState([]);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
 
+  // Load products from TiDB when the page opens
   useEffect(() => {
-    try {
-      localStorage.setItem('market_items', JSON.stringify(items));
-    } catch {}
-  }, [items]);
+    const fetchData = async () => {
+      try {
+        const response = await apiClient.get('/products');
+        setItems(response.data);
+      } catch (err) {
+        console.error("Backend unreachable. Check if Render is 'Live'.");
+      }
+    };
+    fetchData();
+  }, []);
 
-  // Validate all fields
   const canSubmit = useMemo(() => {
     const allFilled = Object.values(form).every(v => String(v).trim().length > 0);
-    const phoneValid = /^[0-9]{10}$/.test(form.phone); // 10-digit numeric
-    const quantityValid = !isNaN(form.quantity) && Number(form.quantity) > 0;
-    const priceValid = !isNaN(form.price) && Number(form.price) > 0;
-    return allFilled && phoneValid && quantityValid && priceValid;
+    const phoneValid = /^[0-9]{10}$/.test(form.phone);
+    return allFilled && phoneValid;
   }, [form]);
 
   const onChange = (e) => {
     const { name, value } = e.target;
-
-    // Only allow numeric input for phone, quantity, price
-    if ((name === 'phone' || name === 'quantity' || name === 'price') && value && !/^\d*$/.test(value)) {
-      return;
-    }
+    // Numeric filter for specific fields
+    if (['phone', 'quantity', 'price'].includes(name) && value && !/^\d*$/.test(value)) return;
 
     setForm(prev => ({
       ...prev,
@@ -51,16 +47,33 @@ function Market() {
     }));
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     if (!canSubmit) return;
-    setItems(prev => [
-      { ...form, quantity: Number(form.quantity), price: Number(form.price) },
-      ...prev
-    ]);
-    setForm({ name: '', state: '', city: '', category: '', product: '', phone: '', quantity: '', price: '' });
-    setShowSuccess(true);
-    setTimeout(() => setShowSuccess(false), 3000);
+    setLoading(true);
+
+    try {
+      // Send to TiDB via Render
+      const response = await apiClient.post('/products', {
+        farmerName: form.name,
+        state: form.state,
+        city: form.city,
+        category: form.category,
+        productName: form.product,
+        farmerPhone: form.phone,
+        quantity: Number(form.quantity),
+        price: Number(form.price)
+      });
+
+      setItems(prev => [response.data, ...prev]);
+      setForm({ name: '', state: '', city: '', category: '', product: '', phone: '', quantity: '', price: '' });
+      setShowSuccess(true);
+      setTimeout(() => setShowSuccess(false), 3000);
+    } catch (err) {
+      alert("Error: Database connection failed.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const cityOptions = form.state ? statesWithCities[form.state] : [];
@@ -71,25 +84,18 @@ function Market() {
       <div className="market-container">
         <form className="card form" onSubmit={onSubmit}>
           <h3>🛒 {t('Add Product')}</h3>
-
-          {showSuccess && (
-            <div className="success-message">
-              ✅ Product added successfully!
-            </div>
-          )}
+          {showSuccess && <div className="success-message">✅ Saved to TiDB Cloud!</div>}
 
           <div className="row">
             <label>{t('Farmer Name')}</label>
-            <input name="name" value={form.name} onChange={onChange} placeholder={t('Farmer Name')} />
+            <input name="name" value={form.name} onChange={onChange} />
           </div>
 
           <div className="row">
             <label>{t('State')}</label>
             <select name="state" value={form.state} onChange={onChange}>
               <option value="">Select State</option>
-              {Object.keys(statesWithCities).map(state => (
-                <option key={state} value={state}>{state}</option>
-              ))}
+              {Object.keys(statesWithCities).map(s => <option key={s} value={s}>{s}</option>)}
             </select>
           </div>
 
@@ -97,9 +103,7 @@ function Market() {
             <label>{t('City')}</label>
             <select name="city" value={form.city} onChange={onChange} disabled={!form.state}>
               <option value="">Select City</option>
-              {cityOptions.map(city => (
-                <option key={city} value={city}>{city}</option>
-              ))}
+              {cityOptions.map(c => <option key={c} value={c}>{c}</option>)}
             </select>
           </div>
 
@@ -107,9 +111,7 @@ function Market() {
             <label>{t('Category')}</label>
             <select name="category" value={form.category} onChange={onChange}>
               <option value="">Select Category</option>
-              {Object.keys(categoriesWithProducts).map(category => (
-                <option key={category} value={category}>{category}</option>
-              ))}
+              {Object.keys(categoriesWithProducts).map(cat => <option key={cat} value={cat}>{cat}</option>)}
             </select>
           </div>
 
@@ -117,29 +119,38 @@ function Market() {
             <label>{t('Product')}</label>
             <select name="product" value={form.product} onChange={onChange} disabled={!form.category}>
               <option value="">Select Product</option>
-              {productOptions.map(product => (
-                <option key={product} value={product}>{product}</option>
-              ))}
+              {productOptions.map(p => <option key={p} value={p}>{p}</option>)}
             </select>
           </div>
 
           <div className="row">
             <label>{t('Farmer Phone')}</label>
-            <input name="phone" value={form.phone} onChange={onChange} placeholder={t('Farmer Phone')} maxLength={10} />
+            <input name="phone" value={form.phone} onChange={onChange} maxLength={10} />
           </div>
 
           <div className="row">
             <label>{t('Quantity (Kgs)')}</label>
-            <input name="quantity" value={form.quantity} onChange={onChange} placeholder={t('Quantity (Kgs)')} />
+            <input name="quantity" value={form.quantity} onChange={onChange} />
           </div>
 
           <div className="row">
             <label>{t('Price (Per Kg)')}</label>
-            <input name="price" value={form.price} onChange={onChange} placeholder={t('Price (Per Kg)')} />
+            <input name="price" value={form.price} onChange={onChange} />
           </div>
 
-          <button className="primary" disabled={!canSubmit}>{t('Submit')}</button>
+          <button className="primary" disabled={!canSubmit || loading}>
+            {loading ? "Saving..." : t('Submit')}
+          </button>
         </form>
+
+        <div className="market-list">
+          {items.map((item, idx) => (
+            <div key={item.id || idx} className="card item">
+              <h4>{item.productName}</h4>
+              <p>{item.city}, {item.state} | ₹{item.price}/kg</p>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
