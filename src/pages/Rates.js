@@ -4,7 +4,8 @@ import statesWithCities from '../data/statesWithCities.json';
 import './Rates.css';
 
 function Rates() {
-  const { language, t } = useLanguage();
+  // Removed 'language' since it was not being used, causing the build error
+  const { t } = useLanguage(); 
   const [products, setProducts] = useState([]);
   const [filters, setFilters] = useState({
     category: '',
@@ -70,68 +71,59 @@ function Rates() {
 
   return (
     <div className="rates">
-      <h2 className="title">{t('Market Products')}</h2>
+      {/* Ensure keys match LanguageContext.js */}
+      <h2 className="title">{t('rates')}</h2>
 
-      {/* Filters Panel */}
       <div className="filters-panel">
         <input type="text" name="search" placeholder={t('Search Product')} value={filters.search} onChange={handleFilterChange} className="filter-input" />
 
         <select name="category" value={filters.category} onChange={handleFilterChange} className="filter-select">
           <option value="">{t('All Categories')}</option>
-          <option value="Vegetables">{t('Vegetables')}</option>
-          <option value="Fruits">{t('Fruits')}</option>
-          <option value="Flowers">{t('Flowers')}</option>
+          <option value="Vegetables">{t('vegetables')}</option>
+          <option value="Fruits">{t('fruits')}</option>
+          <option value="Flowers">{t('flowers')}</option>
         </select>
 
         <select name="state" value={filters.state} onChange={handleFilterChange} className="filter-select">
-          <option value="">{t('All States')}</option>
+          <option value="">{t('selectState')}</option>
           {Object.keys(statesWithCities).map(s => <option key={s} value={s}>{s}</option>)}
         </select>
 
         <select name="city" value={filters.city} onChange={handleFilterChange} className="filter-select" disabled={!filters.state}>
-          <option value="">{t('All Cities')}</option>
+          <option value="">{t('selectCity')}</option>
           {filters.state && statesWithCities[filters.state].map(c => <option key={c} value={c}>{c}</option>)}
         </select>
 
         <div className="range-group">
-          <label>{t('Price')}: {filters.minPrice} - {filters.maxPrice}</label>
+          <label>{t('price')}: {filters.minPrice} - {filters.maxPrice}</label>
           <input type="range" name="minPrice" min="0" max="10000" value={filters.minPrice} onChange={handleFilterChange} />
           <input type="range" name="maxPrice" min="0" max="10000" value={filters.maxPrice} onChange={handleFilterChange} />
-        </div>
-
-        <div className="range-group">
-          <label>{t('Quantity')}: {filters.minQuantity} - {filters.maxQuantity}</label>
-          <input type="range" name="minQuantity" min="0" max="1000" value={filters.minQuantity} onChange={handleFilterChange} />
-          <input type="range" name="maxQuantity" min="0" max="1000" value={filters.maxQuantity} onChange={handleFilterChange} />
         </div>
 
         <select name="sort" value={filters.sort} onChange={handleFilterChange} className="filter-select">
           <option value="">{t('Sort By')}</option>
           <option value="priceAsc">{t('Price Ascending')}</option>
           <option value="priceDesc">{t('Price Descending')}</option>
-          <option value="quantityAsc">{t('Quantity Ascending')}</option>
-          <option value="quantityDesc">{t('Quantity Descending')}</option>
         </select>
 
         <button onClick={resetFilters} className="filter-reset">{t('Clear Filters')}</button>
       </div>
 
-      {/* Products List */}
       <div className="products-list-section">
         {filteredProducts.length === 0 ? (
-          <div className="empty">{t('No Products Found')}</div>
+          <div className="empty">{t('noProducts')}</div>
         ) : (
           <ul className="products-list">
             {filteredProducts.map((p, idx) => (
               <li key={idx} className="product-item">
                 <div className="product-title">{p.product} — <strong>₹{p.price}</strong></div>
                 <div className="product-meta">
-                  <span>{t('Name')}: {p.name}</span>
-                  <span>{t('State')}: {p.state}</span>
-                  <span>{t('City')}: {p.city}</span>
-                  <span>{t('Category')}: {p.category}</span>
-                  <span>{t('Quantity')}: {p.quantity}</span>
-                  <span>{t('Phone')}: {p.phone}</span>
+                  <span>{t('name')}: {p.name}</span>
+                  <span>{t('state')}: {p.state}</span>
+                  <span>{t('city')}: {p.city}</span>
+                  <span>{t('category')}: {p.category}</span>
+                  <span>{t('quantityKgs')}: {p.quantity}</span>
+                  <span>{t('phone')}: {p.phone}</span>
                 </div>
               </li>
             ))}
